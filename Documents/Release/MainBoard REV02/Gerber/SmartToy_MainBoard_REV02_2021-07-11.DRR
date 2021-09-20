@@ -1,0 +1,18 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: SmartToy_MainBoard_REV02 PCB.PcbDoc   7/11/2021  2:34:07 PM
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : SmartToy_MainBoard_REV02_2021-07-11.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      12mil (0.3mm)                                             Round             211       PTH        0.00inch (0.00mm)
+T2      32mil (0.8mm)                                             Round             6         PTH        0.00inch (0.00mm)
+T3      39mil (1.001mm)                                           Round             39        PTH        0.00inch (0.00mm)
+T4      79mil (1.999mm)                                           Round             3         NPTH       0.00inch (0.00mm)
+T5      118mil (3mm)                                              Round             3         NPTH       0.00inch (0.00mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              262
+
+Total Processing Time (hh:mm:ss) : 00:00:00

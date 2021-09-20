@@ -1,0 +1,20 @@
+{
+    "project_name":       "bootloader",
+    "project_path":       "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/bootloader/subproject",
+    "build_dir":          "D:/ProjectWork/23.SmartToy/Documents/example_code/test_touch_esp32/build/bootloader",
+    "config_file":        "D:/ProjectWork/23.SmartToy/Documents/example_code/test_touch_esp32/sdkconfig",
+    "config_defaults":    "",
+    "app_elf":            "bootloader.elf",
+    "app_bin":            "bootloader.bin",
+    "git_revision":       "v4.3.1-29-ge493a4c30e",
+    "target":             "esp32",
+    "phy_data_partition": "",
+    "monitor_baud" :      "115200",
+    "monitor_toolprefix": "xtensa-esp32-elf-",
+    "config_environment" : {
+        "COMPONENT_KCONFIGS" : "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/efuse/Kconfig;D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/esp32/Kconfig;D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/esp_common/Kconfig;D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/esp_system/Kconfig;D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/log/Kconfig;D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/newlib/Kconfig;D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/spi_flash/Kconfig",
+        "COMPONENT_KCONFIGS_PROJBUILD" : "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/bootloader/Kconfig.projbuild;D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/esptool_py/Kconfig.projbuild;D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/partition_table/Kconfig.projbuild"
+    },
+    "build_components" : [ "bootloader", "bootloader_support", "efuse", "esp32", "esp_common", "esp_hw_support", "esp_rom", "esp_system", "esptool_py", "hal", "log", "main", "micro-ecc", "newlib", "partition_table", "soc", "spi_flash", "xtensa", "" ],
+    "build_component_paths" : [ "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/bootloader", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/bootloader_support", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/efuse", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/esp32", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/esp_common", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/esp_hw_support", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/esp_rom", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/esp_system", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/esptool_py", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/hal", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/log", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/bootloader/subproject/main", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/bootloader/subproject/components/micro-ecc", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/newlib", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/partition_table", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/soc", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/spi_flash", "D:/ProjectWork/2.Esp32/esp32_idf/esp-idf/components/xtensa", "" ]
+}
