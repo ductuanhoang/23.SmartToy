@@ -24,5 +24,12 @@
 /***         Exported global functions                                     ***/
 /****************************************************************************/
 
+/***********************************************************************************************************************
+ * Function Name: e_PAGE_SELECTOR page_selection_detect
+ * Description  : get current page
+ * Arguments    : none
+ * Return Value : e_PAGE_SELECTOR
+ ***********************************************************************************************************************/
+e_BOTH_PAGE_SELECTOR get_current_page_selection(void);
 
 #endif /* MAIN_USER_DRIVER_PAGE_SELECTION */

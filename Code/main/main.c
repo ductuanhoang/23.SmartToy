@@ -24,19 +24,23 @@
 
 #include "../Common.h"
 #include "../task/user_console_interface.h"
-#include "../components/user_driver/play_audio/user_play_audio.h"
 // #include "../components/task/user_console_interface.h"
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
 */
 
 device_data_t device_data;
+
+static void device_settup_default(void)
+{
+}
+
 void app_main(void)
 {
-    APP_LOGI("--- APP_MAIN: Smart Chair Update 05/03/2021......");
+    APP_LOGI("--- APP_MAIN: Smart Toy Update 30/11/2021......");
     APP_LOGI("--- APP_MAIN: Free memory: %d bytes", esp_get_free_heap_size());
-
-    //Initialize NVS
+    device_settup_default();
+    // Initialize NVS
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
@@ -48,6 +52,5 @@ void app_main(void)
     logger_list_file("/spiffs");
     check_map_size();
 
-    user_play_audio_init();
     console_task_start();
 }
