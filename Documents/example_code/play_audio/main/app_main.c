@@ -11,7 +11,7 @@
 // #include "audio_example_file.h"
 #include "audio_wav_1.h"
 #include "esp_adc_cal.h"
-#include "esp_rom_sys.h"
+// #include "esp_rom_sys.h"
 
 #define PARTITION_NAME "storage"
 

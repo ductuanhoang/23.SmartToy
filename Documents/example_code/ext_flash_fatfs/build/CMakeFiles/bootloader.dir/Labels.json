@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "D:/1.Work/26.Toys/Documents/example_code/ext_flash_fatfs/build/CMakeFiles/bootloader"
+		},
+		{
+			"file" : "D:/1.Work/26.Toys/Documents/example_code/ext_flash_fatfs/build/CMakeFiles/bootloader.rule"
+		},
+		{
+			"file" : "D:/1.Work/26.Toys/Documents/example_code/ext_flash_fatfs/build/CMakeFiles/bootloader-complete.rule"
+		},
+		{
+			"file" : "D:/1.Work/26.Toys/Documents/example_code/ext_flash_fatfs/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+		},
+		{
+			"file" : "D:/1.Work/26.Toys/Documents/example_code/ext_flash_fatfs/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+		},
+		{
+			"file" : "D:/1.Work/26.Toys/Documents/example_code/ext_flash_fatfs/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+		},
+		{
+			"file" : "D:/1.Work/26.Toys/Documents/example_code/ext_flash_fatfs/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+		},
+		{
+			"file" : "D:/1.Work/26.Toys/Documents/example_code/ext_flash_fatfs/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+		},
+		{
+			"file" : "D:/1.Work/26.Toys/Documents/example_code/ext_flash_fatfs/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+		},
+		{
+			"file" : "D:/1.Work/26.Toys/Documents/example_code/ext_flash_fatfs/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"bootloader"
+		],
+		"name" : "bootloader"
+	}
+}

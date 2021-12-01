@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+D:/1.Work/26.Toys/Documents/example_code/play_audio/build/CMakeFiles/bootloader
+D:/1.Work/26.Toys/Documents/example_code/play_audio/build/CMakeFiles/bootloader.rule
+D:/1.Work/26.Toys/Documents/example_code/play_audio/build/CMakeFiles/bootloader-complete.rule
+D:/1.Work/26.Toys/Documents/example_code/play_audio/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+D:/1.Work/26.Toys/Documents/example_code/play_audio/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+D:/1.Work/26.Toys/Documents/example_code/play_audio/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+D:/1.Work/26.Toys/Documents/example_code/play_audio/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+D:/1.Work/26.Toys/Documents/example_code/play_audio/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+D:/1.Work/26.Toys/Documents/example_code/play_audio/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+D:/1.Work/26.Toys/Documents/example_code/play_audio/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule

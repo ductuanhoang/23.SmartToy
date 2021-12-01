@@ -11,16 +11,27 @@
 /***********************************************************************************************************************
  * Includes <System Includes>
  ***********************************************************************************************************************/
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "AT42QT_Touch.h"
+#include "../../peripheral/user_spi.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/queue.h"
 /***********************************************************************************************************************
  * Macro definitions
  ***********************************************************************************************************************/
-
+#define NOP() asm volatile("nop")
 /***********************************************************************************************************************
  * Typedef definitions
  ***********************************************************************************************************************/
 typedef void (*read_callback)(uint8_t regAddr, uint8_t *data, uint8_t length);
-typedef void (*write_callback)(uint8_t regAdd) typedef void (*cs_callback)(void);
+typedef void (*write_callback)(uint8_t regAdd);
+typedef void (*cs_callback)(void);
+
+DeviceStatus_t touch1_status;
+DeviceStatus_t touch2_status;
 /***********************************************************************************************************************
  * Private global variables and functions
  ***********************************************************************************************************************/
@@ -48,6 +59,23 @@ static void IRAM_ATTR delayMicroseconds(uint32_t us)
         }
     }
 }
+
+typedef struct
+{
+    /* data */
+} AT42QT_Touch;
+
+static DeviceStatus_t AT42QT_GetStatus(void);
+static bool AT42QT_GetCmd(uint8_t cmd, uint8_t *data, uint8_t length);
+static bool AT42QT_SetCmd(uint8_t addr, uint8_t data);
+static void AT42QT_Save(void);
+static void AT42QT_Reset(void);
+static void AT42QT_Configure(uint8_t numkeys, uint8_t guardkey);
+static void AT42QT_Calibrate(void);
+static uint8_t AT42QT_GetKey();
+static uint16_t AT42QT_GetAllKeys(void);
+static void AT42QT_Erase(void);
+
 /***********************************************************************************************************************
  * Exported global variables and functions (to be accessed by other files)
  ***********************************************************************************************************************/
@@ -55,6 +83,23 @@ static void IRAM_ATTR delayMicroseconds(uint32_t us)
 /***********************************************************************************************************************
  * Imported global variables and functions (from other files)
  ***********************************************************************************************************************/
+
+void AT42QT_write(uint8_t value)
+{
+}
+
+void AT42QT_read(uint8_t regAddr, uint8_t *data, uint8_t length)
+{
+}
+
+void AT42QT_cs_pause(void)
+{
+}
+
+void AT42QT_cs_resume(void)
+{
+}
+
 void AT42QT_Init(void)
 {
     AT42QT_Configure(11, 9);
@@ -66,21 +111,24 @@ void AT42QT_Init(void)
  * Arguments    : none
  * Return Value :
  ***********************************************************************************************************************/
-bool AT42QT_GetID(uint8_t *id, read_callback read, cs_callback pause)
+bool AT42QT_GetID(uint8_t *id, uint8_t _touch_number)
 {
     bool status = false;
     uint8_t try_count = 0;
     uint8_t recv_data = 0x00;
     do
     {
-        // delayMicroseconds(kDeviceCommDelay);
-        read(kGetDeviceId, &recv_data, 1);
+        delayMicroseconds(kDeviceCommDelay);
+        spi_touch1_cs_resume();
+        AT42QT_read(kGetDeviceId, &recv_data, 1);
+        AT42QT_cs_pause();
         if ((recv_data == kOK) | (recv_data == kGetDeviceId))
         {
             recv_data = 0x00;
-            pause();
-            // delayMicroseconds(kDeviceCommDelay);
-            read(0x00, &recv_data, 1);
+            delayMicroseconds(kDeviceCommDelay);
+            spi_touch1_cs_resume();
+            AT42QT_read(0x00, &recv_data, 1);
+            AT42QT_cs_pause();
             if (recv_data == kDeviceId)
             {
                 status = true;
@@ -111,13 +159,15 @@ bool AT42QT_GetVer(uint8_t *ver, read_callback read, cs_callback pause)
     uint8_t recv_data = 0x00;
     do
     {
-        read(kGetFirmwareVer, &recv_data, 1);
+        spi_touch1_cs_resume();
+        AT42QT_read(kGetFirmwareVer, &recv_data, 1);
         if (recv_data == kOK)
         {
             recv_data = 0x00;
-            pause();
+            AT42QT_cs_pause();
             delayMicroseconds(kDeviceCommDelay);
-            read(0x00, &recv_data, 1);
+            AT42QT_read(0x00, &recv_data, 1);
+            AT42QT_cs_pause();
             if ((recv_data != kOK) && (recv_data != kGetFirmwareVer))
             {
                 status = true;
@@ -188,26 +238,26 @@ static void AT42QT_Configure(uint8_t numkeys, uint8_t guardkey)
 static void AT42QT_Save(void)
 {
     delayMicroseconds(kDeviceCommDelay);
-    spiWriteVal(kSaveToEeprom);
+    AT42QT_write(kSaveToEeprom);
     vTaskDelay(150 / portTICK_RATE_MS);
 }
 
 static void AT42QT_Reset(void)
 {
-    spiWriteVal(kChipReset);
+    AT42QT_write(kChipReset);
     vTaskDelay(150 / portTICK_RATE_MS); // after reset device need 150ms
 }
 
 static void AT42QT_Calibrate(void)
 {
     delayMicroseconds(kDeviceCommDelay);
-    spiWriteVal(kCalibrateAll);
+    AT42QT_write(kCalibrateAll);
     vTaskDelay(150 / portTICK_RATE_MS); // after reset device need 150ms
 }
 
 static void AT42QT_Erase(void)
 {
-    spiWriteVal(kEraseEeprom);
+    AT42QT_write(kEraseEeprom);
     vTaskDelay(150 / portTICK_RATE_MS); // after reset device need 150ms
 }
 
@@ -217,12 +267,12 @@ static bool AT42QT_GetCmd(uint8_t cmd, uint8_t *data, uint8_t length)
     uint8_t try_count = 0;
     do
     {
-        spiReadVal(cmd, data, 1);
+        AT42QT_read(cmd, data, 1);
         if ((data[0] == kOK) | (data[0] == cmd))
         {
-            pause();
+            AT42QT_cs_pause();
             delayMicroseconds(kDeviceCommDelay);
-            spiReadVal(0x00, data, length);
+            AT42QT_read(0x00, data, length);
             if ((data[0] != kOK) && (data[0] != cmd))
             {
                 status = true;
@@ -242,9 +292,9 @@ static bool AT42QT_SetCmd(uint8_t addr, uint8_t data)
         return false;
     }
     delayMicroseconds(kDeviceCommDelay);
-    spiWriteVal(kWriteCmd + addr);
+    AT42QT_write(kWriteCmd + addr);
     delayMicroseconds(kDeviceCommDelay);
-    spiWriteVal(data);
+    AT42QT_write(data);
     return true;
 }
 /***********************************************************************************************************************

@@ -37,6 +37,9 @@
  * Arguments    : none
  * Return Value : e_MODE_SELECTOR
  ***********************************************************************************************************************/
+// TOP 0 -1
+// MIDDLE 1-1
+// BOTTOM 1 -0
 e_MODE_SELECTOR get_current_mode_selection(void)
 {
     e_MODE_SELECTOR _mode = kMODE_TOP;
@@ -52,6 +55,12 @@ e_MODE_SELECTOR get_current_mode_selection(void)
         _mode = kMODE_TOP;
 
     return _mode;
+}
+
+void get_mode_test_gpio(void)
+{
+    APP_LOGD("mode 1 = %d", gpio_get_level(GPIO_USER_MODE_2));
+    APP_LOGD("mode 2= %d", gpio_get_level(GPIO_USER_MODE_3));
 }
 /***********************************************************************************************************************
 * Static Functions

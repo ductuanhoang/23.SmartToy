@@ -126,7 +126,8 @@ typedef enum
 	 * when open the book we will see 2 pages in the book the
 	 * the left side is page 1 and the right side is page 2 (for example)
 	 */
-	kBOTH_PAGE_1_2 = 0,
+	kBOTH_PAGE_CLOSE = 0,
+	kBOTH_PAGE_1_2 = 1,
 	kBOTH_PAGE_3_4 = 2,
 	kBOTH_PAGE_5_6 = 4,
 	kBOTH_PAGE_7_8 = 6,
@@ -152,7 +153,7 @@ typedef enum
 typedef enum
 {
 	kPAGE_1 = 0,
-	kPAGE_2, 
+	kPAGE_2,
 	kPAGE_3,
 	kPAGE_4,
 	kPAGE_5,

@@ -14,4 +14,4 @@ set(COMPONENTS bootloader esptool_py
 			)  # This reduces the number of redundant components included
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(smart_stop)
+project(smart_toy)

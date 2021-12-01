@@ -32,4 +32,5 @@
  ***********************************************************************************************************************/
 e_BOTH_PAGE_SELECTOR get_current_page_selection(void);
 
+void page_get_level_pin(void);
 #endif /* MAIN_USER_DRIVER_PAGE_SELECTION */

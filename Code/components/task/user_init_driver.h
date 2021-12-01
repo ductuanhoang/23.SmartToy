@@ -1,10 +1,6 @@
-#pragma once
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+#ifndef MAIN_TASK_USER_INIT_DRIVER_H_
+#define MAIN_TASK_USER_INIT_DRIVER_H_
 /****************************************************************************/
 /***        Include files                                                 ***/
 /****************************************************************************/
@@ -20,8 +16,21 @@ extern "C" {
 /****************************************************************************/
 /***         Exported global functions                                     ***/
 /****************************************************************************/
+/***********************************************************************************************************************
+ * Function Name: user_driver_init
+ * Description  : initialize peripheral
+ * Arguments    : none
+ * Return Value : none
+ ***********************************************************************************************************************/
+void user_driver_init(void);
+/***********************************************************************************************************************
+ * Function Name: user_driver_process
+ * Description  : call in loop to process peripheral
+ * Arguments    : none
+ * Return Value : none
+ ***********************************************************************************************************************/
+void user_driver_process(void);
 
+void user_driver_check_param(void);
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* MAIN_TASK_USER_INIT_DRIVER_H_ */

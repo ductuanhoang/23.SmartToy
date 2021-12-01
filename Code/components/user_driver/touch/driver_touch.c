@@ -41,7 +41,6 @@ typedef struct
  * Private global variables and functions
  ***********************************************************************************************************************/
 touch_struct_t touch_1;
-touch_struct_t touch_2;
 /***********************************************************************************************************************
  * Exported global variables and functions (to be accessed by other files)
  ***********************************************************************************************************************/
@@ -66,11 +65,6 @@ void driver_touch_init(void)
     touch_1.write = spi_touch1_write;
     touch_1.cs_pause = spi_touch1_cs_pause;
     touch_1.cs_resume = spi_touch1_cs_resume;
-    /*! init call back function for touch 2*/
-    touch_2.read = spi_touch2_read;
-    touch_2.write = spi_touch2_write;
-    touch_2.cs_pause = spi_touch2_cs_pause;
-    touch_2.cs_resume = spi_touch2_cs_resume;
     APP_LOGI(" Initial driver touch successfully");
 }
 /***********************************************************************************************************************
@@ -81,44 +75,11 @@ void driver_touch_init(void)
  ***********************************************************************************************************************/
 void driver_touch_process(void)
 {
-
 }
 /***********************************************************************************************************************
  * Static Functions
  ***********************************************************************************************************************/
-typedef void (*read_callback)(uint8_t regAddr, uint8_t *data, uint8_t length);
-bool AT42QT_GetID(uint8_t *id, read_callback read)
-{
-    bool status = false;
-    uint8_t try_count = 0;
-    uint8_t recv_data = 0x00;
-    do
-    {
-        // delayMicroseconds(kDeviceCommDelay);
-        read(kGetDeviceId, &recv_data, 1);
-        if( (recv_data == kOK) | (recv_data == kGetDeviceId))
-        {
-            recv_data = 0x00;
-            pause();
-            // delayMicroseconds(kDeviceCommDelay);
-            read(0x00, &recv_data, 1);
-            if(recv_data == kDeviceId)
-            {
-                status = true;
-                *id = recv_data;
-            }
-            else status = false;
-        }
-        else if(recv_data == kDeviceId)
-        {
-            status = true;
-            *id = recv_data;
-        }
-        try_count++;
-    }
-    while((try_count < 30) & (status == false));
-    return status;
-}
+
 /***********************************************************************************************************************
  * End of file
  ***********************************************************************************************************************/

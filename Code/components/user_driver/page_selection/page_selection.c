@@ -33,18 +33,27 @@
 * Imported global variables and functions (from other files)
 ***********************************************************************************************************************/
 
-
-
 /***********************************************************************************************************************
  * Function Name: e_PAGE_SELECTOR page_selection_detect
  * Description  : get current page
  * Arguments    : none
  * Return Value : e_PAGE_SELECTOR
  ***********************************************************************************************************************/
+// Đóng -> P7 = P8 = 1
+// Mở trang 1 -> P7 = 1
+// Mở trang 2 -> P6 = 1
+// Mở trang 3 -> P5 = 1
+// Mở trang 4 -> P4 = 1
+// Mở trang 5 -> P3 = 1
+// Mở trang 6 -> P2 = 1
 e_BOTH_PAGE_SELECTOR get_current_page_selection(void)
 {
     e_BOTH_PAGE_SELECTOR page_number = kBOTH_PAGE_1_2;
-    if (gpio_get_level(GPIO_USER_PAGE_3) == 0)
+    if (gpio_get_level(GPIO_USER_PAGE_2) == 0)
+    {
+        page_number = kBOTH_PAGE_3_4;
+    }
+    else if (gpio_get_level(GPIO_USER_PAGE_3) == 0)
     {
         page_number = kBOTH_PAGE_3_4;
     }
@@ -64,11 +73,25 @@ e_BOTH_PAGE_SELECTOR get_current_page_selection(void)
     {
         page_number = kBOTH_PAGE_11_12;
     }
+    if (gpio_get_level(GPIO_USER_PAGE_8) == 0)
+    {
+        page_number = kBOTH_PAGE_3_4;
+    }
     else
         page_number = kBOTH_PAGE_1_2;
     return page_number;
 }
 
+void page_get_level_pin(void)
+{
+    APP_LOGD("page 2 = %d", gpio_get_level(GPIO_USER_PAGE_2));
+    APP_LOGD("page 3 = %d", gpio_get_level(GPIO_USER_PAGE_3));
+    APP_LOGD("page 4 = %d", gpio_get_level(GPIO_USER_PAGE_4));
+    APP_LOGD("page 5 = %d", gpio_get_level(GPIO_USER_PAGE_5));
+    APP_LOGD("page 6 = %d", gpio_get_level(GPIO_USER_PAGE_6));
+    APP_LOGD("page 7 = %d", gpio_get_level(GPIO_USER_PAGE_7));
+    APP_LOGD("page 8 = %d", gpio_get_level(GPIO_USER_PAGE_8));
+}
 /***********************************************************************************************************************
 * Static Functions
 ***********************************************************************************************************************/

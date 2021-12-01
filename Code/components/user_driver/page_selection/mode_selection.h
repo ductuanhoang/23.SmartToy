@@ -31,4 +31,5 @@
  ***********************************************************************************************************************/
 e_MODE_SELECTOR get_current_mode_selection(void);
 
+void get_mode_test_gpio(void);
 #endif /* MAIN_USER_DRIVER_MODE_SELECTION */

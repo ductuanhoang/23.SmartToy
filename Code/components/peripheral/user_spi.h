@@ -38,14 +38,12 @@ void user_spi_init(uint8_t spi_number);
  * Return Value : none
  ***********************************************************************************************************************/
 void spi_touch1_cs_pause(void);
-void spi_touch1_cs_resume(void);
-void spi_touch1_write(uint8_t value);
-esp_err_t spi_touch1_read(uint8_t regAddr, uint8_t* data, uint8_t length);
 
+void spi_touch1_cs_resume(void);
 void spi_touch2_cs_pause(void);
 void spi_touch2_cs_resume(void);
-void spi_touch2_write(uint8_t value);
-esp_err_t spi_touch2_read(uint8_t regAddr, uint8_t* data, uint8_t length);
+void spi_touch1_write(uint8_t value);
 
+esp_err_t spi_touch1_read(uint8_t regAddr, uint8_t *data, uint8_t length);
 
 #endif /* MAIN_USER_SPI */
