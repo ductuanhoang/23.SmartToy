@@ -1,5 +1,5 @@
 /*
- * driver_touch.c
+ * led_driver.c
  *
  *  Created on: Jan 9, 2021
  *      Author: ductu
@@ -11,71 +11,71 @@
 /***********************************************************************************************************************
  * Includes <System Includes>
  ***********************************************************************************************************************/
-#include "driver_touch.h"
-// #include "../../peripheral/user_spi.h"
+#include "audio_task.h"
+
+
 /***********************************************************************************************************************
  * Macro definitions
  ***********************************************************************************************************************/
 
-typedef esp_err_t (*touch_read_fptr_t)(uint8_t regAddr, uint8_t *data, uint8_t length);
-typedef void (*touch_write_fptr_t)(uint8_t value);
-typedef void (*touch_cs)(void);
 /***********************************************************************************************************************
  * Typedef definitions
  ***********************************************************************************************************************/
-typedef struct
-{
-    /*! touch number */
-    uint8_t touch_number;
-    /*! read function pointer */
-    touch_read_fptr_t read;
-    /*! write function pointer */
-    touch_write_fptr_t write;
-    /*! cs pin number */
-    touch_cs cs_resume;
-    touch_cs cs_pause;
-    /*! Store the info messages */
-    uint8_t info_msg;
-} touch_struct_t;
+
 /***********************************************************************************************************************
  * Private global variables and functions
  ***********************************************************************************************************************/
-touch_struct_t touch_1;
+static void AudioControl_Task(void *pvParameters);
+static bool audio_active = false;
 /***********************************************************************************************************************
  * Exported global variables and functions (to be accessed by other files)
  ***********************************************************************************************************************/
-
+static E_PLAY_AUDIO_TYPE audio_type = kWakeUpAudio;
 /***********************************************************************************************************************
  * Imported global variables and functions (from other files)
  ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * Function Name: driver_touch_init
- * Description  :
+ * Function Name:
+ * Description  : initialize peripheral
  * Arguments    : none
- * Return Value :
+ * Return Value : none
  ***********************************************************************************************************************/
-void driver_touch_init(void)
+void audio_task(void)
 {
-    /*! Initial spi and parameters */
-    // user_spi_init(1); // initialize touch 1
-    // user_spi_init(2); // initialize touch 2
-    /*! init call back functions for touch 1*/
-    APP_LOGI(" Initial driver touch successfully");
-}
-/***********************************************************************************************************************
- * Function Name: driver_touch_process
- * Description  :
- * Arguments    : none
- * Return Value :
- ***********************************************************************************************************************/
-void driver_touch_process(void)
-{
+    xTaskCreatePinnedToCore(AudioControl_Task, "audio_task", 4 * 1024, NULL, 2 | portPRIVILEGE_BIT, NULL, 0);
 }
 /***********************************************************************************************************************
  * Static Functions
  ***********************************************************************************************************************/
+void audio_task_activate_callback(E_PLAY_AUDIO_TYPE _type,
+                                  e_MODE_SELECTOR _mode,
+                                  e_LANGUAGE_SELECTOR _language,
+                                  e_PAGE_NUMBER _page_number,
+                                  e_TOUCH_NUMBER _touch_number)
+{
+    audio_active = true;
+    audio_type = _type;
+}
 
+/***********************************************************************************************************************
+ * Function Name:
+ * Description  :
+ * Arguments    :
+ * Return Value : none
+ ***********************************************************************************************************************/
+static void AudioControl_Task(void *pvParameters)
+{
+    while (1)
+    {
+        if (audio_active == true)
+        {
+            play_audio_call_back(audio_type, device_data.mode, device_data.languge, device_data.page_number, device_data.touch_number);
+            audio_active = false;
+        }
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+    }
+}
 /***********************************************************************************************************************
  * End of file
  ***********************************************************************************************************************/

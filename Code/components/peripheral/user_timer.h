@@ -18,7 +18,7 @@
 
 #define TIMER_INTERVAL			1000 /*1ms*/
 
-void UserTimer_Init(void);
+void user_timer_init(void);
 uint32_t usertimer_gettick( void );
 
 #endif /* MAIN_INTERFACE_USERTIMER_H_ */

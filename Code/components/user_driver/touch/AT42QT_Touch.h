@@ -30,6 +30,7 @@ typedef struct
 /****************************************************************************/
 /***        Type Definitions                                              ***/
 /****************************************************************************/
+typedef void (*touch_buttons_handler)(uint8_t, uint8_t, void *);
 
 enum QT1110Misc
 {
@@ -83,5 +84,9 @@ enum QT1110HardCodedSetup
 /****************************************************************************/
 /***         Exported global functions                                     ***/
 /****************************************************************************/
+void AT42QT_1_init(void);
 
+void AT42QT_1_process(void);
+
+void AT42QT_1_set_callback(touch_buttons_handler cb);
 #endif /* MAIN_USER_AT42QT_TOUCH */

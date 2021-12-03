@@ -18,7 +18,9 @@
 #include "../user_driver/page_selection/page_selection.h"
 #include "../user_driver/page_selection/language_selection.h"
 #include "../user_driver/page_selection/mode_selection.h"
-
+#include "../user_driver/play_audio/play_audio.h"
+#include "../user_driver/touch/AT42QT_Touch.h"
+#include "../peripheral/user_timer.h"
 /***********************************************************************************************************************
  * Macro definitions
  ***********************************************************************************************************************/
@@ -30,24 +32,41 @@
 /***********************************************************************************************************************
  * Typedef definitions
  ***********************************************************************************************************************/
+typedef void (*events_handler_play_audio)(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
 
 /***********************************************************************************************************************
  * Private global variables and functions
  ***********************************************************************************************************************/
 static void touch_event_handler(uint8_t touch_key, uint8_t touch_page);
-static void (*events_handler_play_audio)(uint8_t, uint8_t, uint8_t, uint8_t);
 static void vsm_btn_event_press(int btn_idx, int event, void *p);
 static void user_buttons_setup(void);
 
+static void touch_event_press(uint8_t btn_idx, uint8_t event, void *p);
+
 static tsButtonConfig btnParams[] = BOARD_BTN_CONFIG;
+static events_handler_play_audio user_play_audio_call;
 /***********************************************************************************************************************
  * Exported global variables and functions (to be accessed by other files)
  ***********************************************************************************************************************/
-
+extern void audio_task_activate_callback(E_PLAY_AUDIO_TYPE _type,
+                             e_MODE_SELECTOR _mode,
+                             e_LANGUAGE_SELECTOR _language,
+                             e_PAGE_NUMBER _page_number,
+                             e_TOUCH_NUMBER _touch_number);
 /***********************************************************************************************************************
  * Imported global variables and functions (from other files)
  ***********************************************************************************************************************/
-
+void init_callback(events_handler_play_audio cb)
+{
+    if (cb == NULL)
+    {
+        APP_LOGE("pls initialize cb function");
+    }
+    else
+    {
+        user_play_audio_call = cb;
+    }
+}
 /***********************************************************************************************************************
  * Function Name: user_driver_init
  * Description  : initialize peripheral
@@ -56,6 +75,12 @@ static tsButtonConfig btnParams[] = BOARD_BTN_CONFIG;
  ***********************************************************************************************************************/
 void user_driver_init(void)
 {
+    // initialize Touch device
+    AT42QT_1_init();
+    // initialize timer
+    user_timer_init();
+    // initialize audio device
+    play_audio_init();
     // initialize led driver
     user_leds_init(); // initialize gpio
     // init buttons gpio
@@ -64,6 +89,12 @@ void user_driver_init(void)
     user_buttons_setup();
     // init both_page, language, mode gpio
     language_gpio_init();
+
+    // callback event touch and buttons handler
+    init_callback(audio_task_activate_callback);
+
+    // set call back touch buttons
+    AT42QT_1_set_callback(touch_event_press);
 }
 
 /***********************************************************************************************************************
@@ -79,6 +110,8 @@ void user_driver_process(void)
     device_data.languge = get_current_languge();
     device_data.mode = get_current_mode_selection();
     device_data.both_page = get_current_page_selection();
+    // process touch event
+    AT42QT_1_process();
 }
 /***********************************************************************************************************************
  * Static Functions
@@ -88,7 +121,7 @@ void user_driver_check_param(void)
     APP_LOGD("languge = %d", device_data.languge);
     APP_LOGD("mode = %d", device_data.mode);
     APP_LOGD("both_page = %d", device_data.both_page);
-    user_leds_call(kLED_BLINK, 5);
+
     page_get_level_pin();
     get_mode_test_gpio();
 }
@@ -104,9 +137,15 @@ static void touch_event_handler(uint8_t touch_key, uint8_t touch_page)
     device_data.page_number = device_data.both_page + touch_page;
     device_data.touch_number = touch_key;
     // send touch event to play audio of the device
-    events_handler_play_audio(device_data.mode, device_data.languge, device_data.page_number, device_data.touch_number);
+    user_play_audio_call(kSelectedPlayAudio, device_data.mode, device_data.languge, device_data.page_number, device_data.touch_number);
 }
 
+/***********************************************************************************************************************
+ * Function Name: user_buttons_setup
+ * Description  : setup user callback function for buttons event handler
+ * Arguments    : none
+ * Return Value : none
+ ***********************************************************************************************************************/
 static void user_buttons_setup(void)
 {
     vHardButtonSetGetTickCallback(usertimer_gettick);
@@ -115,18 +154,43 @@ static void user_buttons_setup(void)
 }
 
 /***********************************************************************************************************************
-* Function Name: vsm_btn_event_release
-* Description  :
-* Arguments    : none
-* Return Value : none
-***********************************************************************************************************************/
+ * Function Name: vsm_btn_event_release
+ * Description  :
+ * Arguments    : none
+ * Return Value : none
+ ***********************************************************************************************************************/
 static void vsm_btn_event_press(int btn_idx, int event, void *p)
 {
     switch (btn_idx)
     {
     case 0:
         APP_LOGD("vsm_btn_event_press = %d", btn_idx);
+        // callbacks function play audio  wake up
+        user_play_audio_call(kWakeUpAudio, 0, 0, 0, 0);
+        user_leds_call(kLED_BLINK, 5);
         break;
+    default:
+        break;
+    }
+}
+
+static void touch_event_press(uint8_t btn_idx, uint8_t event, void *p)
+{
+    APP_LOGD("touch %d pressed", btn_idx);
+    switch (btn_idx)
+    {
+    case 0:
+        break;
+    case 1:
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    case 4:
+    
+        break;
+
     default:
         break;
     }

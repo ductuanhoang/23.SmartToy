@@ -1,17 +1,18 @@
-/*
- * user_spi.h
- *
- *  Created on: Jan 9, 2021
- *      Author: ductu
- */
 
-#ifndef MAIN_INTERFACE_USERSPI_H_
-#define MAIN_INTERFACE_USERSPI_H_
+/*
+ * audio_task.h
+ *
+ *  Created on: Nov 24, 2020
+ *      Author: Yolo
+ */
+#ifndef MAIN_TASK_AUDIO_TASK_H_
+#define MAIN_TASK_AUDIO_TASK_H_
 
 /****************************************************************************/
 /***        Include files                                                 ***/
 /****************************************************************************/
 #include "../../Common.h"
+#include "../user_driver/play_audio/play_audio.h"
 /****************************************************************************/
 /***        Macro Definitions                                             ***/
 /****************************************************************************/
@@ -24,28 +25,16 @@
 /***         Exported global functions                                     ***/
 /****************************************************************************/
 /***********************************************************************************************************************
- * Function Name: user_spi_init
- * Description  : support initialization two different spi devices
+ * Function Name:
+ * Description  : call in loop to process peripheral
  * Arguments    : none
  * Return Value : none
  ***********************************************************************************************************************/
-void user_spi_init(uint8_t spi_number);
+void audio_task(void);
 
-/***********************************************************************************************************************
- * Function Name: spi_touch1_cs_pause
- * Description  : pause communication touch 1
- * Arguments    : none
- * Return Value : none
- ***********************************************************************************************************************/
-void spi_touch1_cs_pause(void);
-void spi_touch1_cs_resume(void);
-void spi_touch2_cs_pause(void);
-void spi_touch2_cs_resume(void);
-
-void spi_touch1_write(uint8_t value);
-esp_err_t spi_touch1_read(uint8_t regAddr, uint8_t *data, uint8_t length);
-
-void spi_touch2_write(uint8_t value);
-esp_err_t spi_touch2_read(uint8_t regAddr, uint8_t *data, uint8_t length);
-
-#endif /* MAIN_INTERFACE_USERSPI_H_ */
+void audio_task_activate_callback(E_PLAY_AUDIO_TYPE _type,
+                             e_MODE_SELECTOR _mode,
+                             e_LANGUAGE_SELECTOR _language,
+                             e_PAGE_NUMBER _page_number,
+                             e_TOUCH_NUMBER _touch_number);
+#endif /* MAIN_TASK_AUDIO_TASK_H_ */

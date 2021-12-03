@@ -15,7 +15,8 @@
 /***********************************************************************************************************************
  * Macro definitions
  ***********************************************************************************************************************/
-
+#define USER_LED_OFF 1
+#define USER_LED_ON 0
 /***********************************************************************************************************************
  * Typedef definitions
  ***********************************************************************************************************************/
@@ -26,7 +27,6 @@
 static void led_blinking_process(void);
 static void led_state_active(void);
 static void user_gpio_set_level(bool _status);
-
 
 static user_led_status_t user_led_status;
 /***********************************************************************************************************************
@@ -62,7 +62,8 @@ void user_leds_init(void)
     {
         APP_LOGE("error configuring outputs\n");
     }
-
+    // default turn off first
+    user_gpio_set_level(USER_LED_OFF);
     // setup value user_led_status
     user_led_status.number_blinking = 5;
     user_led_status.time_blinking = 500; // default value is 500ms interval
@@ -86,6 +87,8 @@ void user_leds_call(e_LED_STATUS_TYPE type, uint8_t number_blinking)
     // active led processing
     if (type == kLED_BLINK)
         led_state_active();
+
+    APP_LOGD("user_leds_call");
 }
 /***********************************************************************************************************************
  * Function Name: user_leds_process
@@ -97,11 +100,11 @@ void user_leds_process(void)
 {
     if (user_led_status.type == kLED_OFF)
     {
-        user_gpio_set_level(0);
+        user_gpio_set_level(USER_LED_OFF);
     }
     else if (user_led_status.type == kLED_ON)
     {
-        user_gpio_set_level(1);
+        user_gpio_set_level(USER_LED_ON);
     }
     else if (user_led_status.type == kLED_BLINK)
     {
@@ -128,7 +131,7 @@ static void led_blinking_process(void)
         break;
     case 0:
         timming_state = usertimer_gettick();
-        user_gpio_set_level(1); // led off
+        user_gpio_set_level(USER_LED_OFF); // led off
         leds_state = 1;
         break;
     case 1:
@@ -136,8 +139,8 @@ static void led_blinking_process(void)
             timming_state = 3;
         else if (usertimer_gettick() - timming_state > user_led_status.time_blinking)
         {
-            user_gpio_set_level(0); // led on
-            timming_state = 2;
+            user_gpio_set_level(USER_LED_ON); // led on
+            leds_state = 2;
             timming_state = usertimer_gettick();
             leds_count--;
         }
@@ -146,6 +149,7 @@ static void led_blinking_process(void)
         if (usertimer_gettick() - timming_state > user_led_status.time_blinking)
         {
             timming_state = 0;
+            leds_state = 0;
         }
         break;
     case 3:

@@ -74,7 +74,7 @@ static void PlantControl_Task(void *pvParameters)
         if (count > 1000)
         {
             count = 0;
-            user_driver_check_param();
+            // user_driver_check_param();
         }
         count++;
         vTaskDelay(10 / portTICK_PERIOD_MS);

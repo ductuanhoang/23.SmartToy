@@ -25,6 +25,7 @@
 #include "../Common.h"
 #include "../task/user_console_interface.h"
 #include "../task/plan_task.h"
+#include "../task/audio_task.h"
 // #include "../components/task/user_console_interface.h"
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
@@ -54,5 +55,6 @@ void app_main(void)
     check_map_size();
 
     plan_task();
+    audio_task();
     console_task_start();
 }

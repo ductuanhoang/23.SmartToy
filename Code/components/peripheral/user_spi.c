@@ -32,7 +32,7 @@
 /***********************************************************************************************************************
  * Typedef definitions
  ***********************************************************************************************************************/
-#define EEPROM_CLK_FREQ (1 * 1000 * 1000) //When powered by 3.3V, EEPROM max freq is 1MHz
+#define EEPROM_CLK_FREQ (1 * 1000 * 1000) // When powered by 3.3V, EEPROM max freq is 1MHz
 #define EEPROM_INPUT_DELAY_NS ((1000 * 1000 * 1000 / EEPROM_CLK_FREQ) / 2 + 20)
 
 /***********************************************************************************************************************
@@ -200,6 +200,51 @@ esp_err_t spi_touch1_read(uint8_t regAddr, uint8_t *data, uint8_t length)
     memcpy(data, trans.rx_data, 4);
     return err;
 }
+
+/***********************************************************************************************************************
+ * Function Name: spi_touch2_write
+ * Description  : write the value to the device
+ * Arguments    : uint8_t value
+ * Return Value : none
+ ***********************************************************************************************************************/
+void spi_touch2_write(uint8_t value)
+{
+    esp_err_t ret;
+    spi_transaction_t t;
+
+    memset(&t, 0, sizeof(t)); // Zero out the transaction
+    t.length = 8;             // Command is 8 bits
+    t.tx_buffer = &value;     // The data is the cmd itself
+    t.user = (void *)0;       // D/C needs to be set to 0
+    ret = spi_device_transmit(touch2_spi_handle, &t);
+    assert(ret == ESP_OK); // Should have had no issues.
+    // return true;
+}
+/***********************************************************************************************************************
+ * Function Name: spi_touch2_read
+ * Description  : read the value from the device
+ * Arguments    : uint8_t value
+ * Return Value : none
+ ***********************************************************************************************************************/
+
+esp_err_t spi_touch2_read(uint8_t regAddr, uint8_t *data, uint8_t length)
+{
+    spi_transaction_t trans = {
+        .length = (length)*8,
+        .tx_buffer = &regAddr,
+        .flags = SPI_TRANS_USE_RXDATA,
+        .user = (void *)0,
+    };
+    esp_err_t err = spi_device_polling_transmit(touch2_spi_handle, &trans);
+    if (err != ESP_OK)
+    {
+        printf("read data error\r\n");
+        return err;
+    }
+    memcpy(data, trans.rx_data, 4);
+    return err;
+}
+
 /***********************************************************************************************************************
  * Static Functions
  ***********************************************************************************************************************/

@@ -15,7 +15,7 @@
 static void periodic_timer_callback(void *arg);
 
 static uint32_t tick_time = 0;
-void UserTimer_Init()
+void user_timer_init(void)
 {
     const esp_timer_create_args_t periodic_timer_args = {
         .callback = &periodic_timer_callback,

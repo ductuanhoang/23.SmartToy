@@ -85,7 +85,7 @@ enum
 #define GPIO_INPUT_BUTTONS_PIN_SEL (1ULL << GPIO_USER_BUTTON)
 
 #define GPIO_USER_LED 2 // led k
-#define GPIO_OUTPUT_PIN_SEL (1ULL << GPIO_USER_BUTTON)
+#define GPIO_OUTPUT_PIN_SEL (1ULL << GPIO_USER_LED)
 
 /**
  * @brief define GPIO mode, page and languge
