@@ -122,6 +122,12 @@ typedef enum
 
 typedef enum
 {
+	kPageLeft,
+	kPageRight
+} e_PAGE_LEFT_RIGHT;
+
+typedef enum
+{
 	/*
 	 * when open the book we will see 2 pages in the book the
 	 * the left side is page 1 and the right side is page 2 (for example)

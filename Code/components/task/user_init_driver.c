@@ -37,7 +37,7 @@ typedef void (*events_handler_play_audio)(uint8_t, uint8_t, uint8_t, uint8_t, ui
 /***********************************************************************************************************************
  * Private global variables and functions
  ***********************************************************************************************************************/
-static void touch_event_handler(uint8_t touch_key, uint8_t touch_page);
+static void touch_event_handler(uint8_t touch_key, e_PAGE_LEFT_RIGHT touch_page);
 static void vsm_btn_event_press(int btn_idx, int event, void *p);
 static void user_buttons_setup(void);
 
@@ -49,10 +49,10 @@ static events_handler_play_audio user_play_audio_call;
  * Exported global variables and functions (to be accessed by other files)
  ***********************************************************************************************************************/
 extern void audio_task_activate_callback(E_PLAY_AUDIO_TYPE _type,
-                             e_MODE_SELECTOR _mode,
-                             e_LANGUAGE_SELECTOR _language,
-                             e_PAGE_NUMBER _page_number,
-                             e_TOUCH_NUMBER _touch_number);
+                                         e_MODE_SELECTOR _mode,
+                                         e_LANGUAGE_SELECTOR _language,
+                                         e_PAGE_NUMBER _page_number,
+                                         e_TOUCH_NUMBER _touch_number);
 /***********************************************************************************************************************
  * Imported global variables and functions (from other files)
  ***********************************************************************************************************************/
@@ -132,7 +132,7 @@ void user_driver_check_param(void)
  *                touch_page: both_page number to be selected
  * Return Value : none
  ***********************************************************************************************************************/
-static void touch_event_handler(uint8_t touch_key, uint8_t touch_page)
+static void touch_event_handler(uint8_t touch_key, e_PAGE_LEFT_RIGHT touch_page)
 {
     device_data.page_number = device_data.both_page + touch_page;
     device_data.touch_number = touch_key;
@@ -173,26 +173,26 @@ static void vsm_btn_event_press(int btn_idx, int event, void *p)
         break;
     }
 }
+static uint8_t active_touch_buttons = 0;
 
 static void touch_event_press(uint8_t btn_idx, uint8_t event, void *p)
 {
-    APP_LOGD("touch %d pressed", btn_idx);
-    switch (btn_idx)
+    // APP_LOGD("touch %d pressed", btn_idx);
+    if ((active_touch_buttons == 0) && (btn_idx != 0))
     {
-    case 0:
-        break;
-    case 1:
-        break;
-    case 2:
-        break;
-    case 3:
-        break;
-    case 4:
-    
-        break;
-
-    default:
-        break;
+        active_touch_buttons = 1;
+    }
+    if (btn_idx == 0)
+    {
+        active_touch_buttons = 0;
+    }
+    else
+    {
+        if (active_touch_buttons == 1)
+        {
+            active_touch_buttons = 2;
+            touch_event_handler(btn_idx - 1, kPageRight);
+        }
     }
 }
 /***********************************************************************************************************************

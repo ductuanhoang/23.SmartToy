@@ -27,6 +27,12 @@ typedef struct
     uint8_t detect : 1;
     uint8_t one : 1;
 } DeviceStatus_t;
+
+typedef enum
+{
+    kTouchButtonRelease = 0,
+    kTouchButtonPress,
+} e_touch_buttons_action;
 /****************************************************************************/
 /***        Type Definitions                                              ***/
 /****************************************************************************/

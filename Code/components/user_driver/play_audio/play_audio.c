@@ -13,11 +13,13 @@
  ***********************************************************************************************************************/
 #include "../../Common.h"
 #include "play_audio.h"
-// include audio files
-#include "audio_files/audio_wav_1.h"
 #include "audio_files/wake_up.h"
 #include "driver/i2s.h"
 #include "driver/adc.h"
+
+// include audio files
+#include "audio_files/language1_page1_button1.h"
+#include "audio_files/audio_wav_1.h"
 /***********************************************************************************************************************
  * Macro definitions
  ***********************************************************************************************************************/
@@ -108,6 +110,7 @@ static void play_wakeup_file(void)
  ***********************************************************************************************************************/
 static void play_selected_file(e_MODE_SELECTOR _mode, e_LANGUAGE_SELECTOR _language, e_PAGE_NUMBER _page_number, e_TOUCH_NUMBER _touch_number)
 {
+    APP_LOGD("play audio mode: %d -- language: %d -- page: %d -- touch: %d", _mode, _language, _page_number, _touch_number);
     if (_mode == kMODE_TOP)
     {
         if (_language == kLANGUAGE_1)
@@ -182,12 +185,12 @@ static void i2s_init(void)
 static void i2s_play_file(void)
 {
     APP_LOGI("Audio device play");
-    memcpy(&WavHeader, &wake_audio, 44); // Copy the header part of the wav data into our structure
+    memcpy(&WavHeader, &language1_page1_button1, 44); // Copy the header part of the wav data into our structure
     DumpWAVHeader(&WavHeader);
     if (ValidWavData(&WavHeader))
     {
         i2s_set_sample_rates(EXAMPLE_I2S_NUM, WavHeader.SampleRate); // set sample rate
-        TheData = wake_audio;                                       // set to start of data
+        TheData = language1_page1_button1;                           // set to start of data
         TheData += 44;
     }
     while (1)

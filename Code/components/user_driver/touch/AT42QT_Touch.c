@@ -86,17 +86,30 @@ void AT42QT_1_init(void)
         APP_LOGD("id device = %x\r\n", id);
     else
         APP_LOGD("id device error\r\n");
-    
 }
 
+bool _touch_buttons_press = false;
 void AT42QT_1_process(void)
 {
     DeviceStatus_t user_get_status = AT42QT_GetStatus();
+    uint8_t key_number = 0;
     if (user_get_status.detect == 1)
     {
-        uint8_t key_number = AT42QT_GetKey();
-        APP_LOGD("key_number = %d\r\n", key_number);
-        event_callback_handler(1, key_number, NULL);
+        key_number = AT42QT_GetKey();
+        // APP_LOGD("key_number = %d\r\n", key_number);
+        if ((key_number != 0) | (key_number != 16))
+        {
+            _touch_buttons_press = true;
+            event_callback_handler(key_number, kTouchButtonPress, NULL);
+        }
+    }
+    else
+    {
+        if (_touch_buttons_press == true)
+        {
+            _touch_buttons_press = false;
+            event_callback_handler(0, kTouchButtonRelease, NULL);
+        }
     }
 }
 

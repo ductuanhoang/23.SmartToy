@@ -18,10 +18,9 @@
  * Macro definitions
  ***********************************************************************************************************************/
 #define TOUCH_1_SPI_NUM HSPI_HOST
-#define TOUCH_2_SPI_NUM VSPI_HOST
 
-#define TOUCH_1_PIN_NUM_MISO 19
-#define TOUCH_1_PIN_NUM_MOSI 23
+#define TOUCH_1_PIN_NUM_MISO 23
+#define TOUCH_1_PIN_NUM_MOSI 19
 #define TOUCH_1_PIN_NUM_CLK 18
 #define TOUCH_1_PIN_NUM_CS 5
 

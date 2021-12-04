@@ -26,6 +26,7 @@
 #include "../task/user_console_interface.h"
 #include "../task/plan_task.h"
 #include "../task/audio_task.h"
+#include "../components/user_driver/external_flash/external_flash.h"
 // #include "../components/task/user_console_interface.h"
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
@@ -53,6 +54,7 @@ void app_main(void)
     flash_file_init();
     logger_list_file("/spiffs");
     check_map_size();
+    user_external_flash_init();
 
     plan_task();
     audio_task();
