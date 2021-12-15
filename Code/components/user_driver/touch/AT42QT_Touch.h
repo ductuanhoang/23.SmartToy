@@ -95,4 +95,11 @@ void AT42QT_1_init(void);
 void AT42QT_1_process(void);
 
 void AT42QT_1_set_callback(touch_buttons_handler cb);
+
+void AT42QT_2_init(void);
+
+void AT42QT_2_process(void);
+
+void AT42QT_2_set_callback(touch_buttons_handler cb);
+
 #endif /* MAIN_USER_AT42QT_TOUCH */

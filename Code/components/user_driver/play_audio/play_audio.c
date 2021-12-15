@@ -20,14 +20,11 @@
 // include audio files
 #include "audio_files/language1_page1_button1.h"
 #include "audio_files/audio_wav_1.h"
+// include sd card play audio
+#include "play_audio_sd_card/play_audio_sd_card.h"
 /***********************************************************************************************************************
  * Macro definitions
  ***********************************************************************************************************************/
-#define I2S_BCK_IO (27) // BCKL
-#define I2S_WS_IO (26)  // LRCL
-#define I2S_DO_IO (25)  // DOUT
-#define I2S_DI_IO (-1)
-#define EXAMPLE_I2S_NUM I2S_NUM_0
 
 /***********************************************************************************************************************
  * Typedef definitions
@@ -98,9 +95,19 @@ void play_audio_call_back(E_PLAY_AUDIO_TYPE _type,
  * Arguments    : none
  * Return Value : none
  ***********************************************************************************************************************/
+static uint8_t count = 0;
 static void play_wakeup_file(void)
 {
+#if (USE_SD_CARD_PLAY_AUDIO == 1)
+
+    sd_card_play_file("Wakeup/wakeup.wav");
+    // char file_path[30];
+    // memset(file_path, 0x00, sizeof(file_path));
+    // sprintf(file_path, "MODE%d/Langua%d/page0%d/%d.wav", 1, 0 + 1, 1, count++);
+    // sd_card_play_file(file_path);
+#elif (USE_INTERAL_FLASH_PLAY_AUDIO == 1)
     i2s_play_file();
+#endif
 }
 /***********************************************************************************************************************
  * Function Name: play_selected_file
@@ -111,6 +118,7 @@ static void play_wakeup_file(void)
 static void play_selected_file(e_MODE_SELECTOR _mode, e_LANGUAGE_SELECTOR _language, e_PAGE_NUMBER _page_number, e_TOUCH_NUMBER _touch_number)
 {
     APP_LOGD("play audio mode: %d -- language: %d -- page: %d -- touch: %d", _mode, _language, _page_number, _touch_number);
+#if (USE_INTERAL_FLASH_PLAY_AUDIO == 1)
     if (_mode == kMODE_TOP)
     {
         if (_language == kLANGUAGE_1)
@@ -140,6 +148,16 @@ static void play_selected_file(e_MODE_SELECTOR _mode, e_LANGUAGE_SELECTOR _langu
         {
         }
     }
+#elif (USE_SD_CARD_PLAY_AUDIO == 1)
+    char file_path[30];
+    memset(file_path, 0x00, sizeof(file_path));
+    if (_page_number < 10)
+        sprintf(file_path, "MODE%d/Langua%d/page0%d/%d.wav", _mode, _language + 1, _page_number, _touch_number);
+    else
+        sprintf(file_path, "MODE%d/Langua%d/page%d/%d.wav", _mode, _language + 1, _page_number, _touch_number);
+
+    sd_card_play_file(file_path);
+#endif
 }
 /***********************************************************************************************************************
  * Function Name: i2s_init

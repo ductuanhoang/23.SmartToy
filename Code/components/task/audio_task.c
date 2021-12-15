@@ -12,8 +12,7 @@
  * Includes <System Includes>
  ***********************************************************************************************************************/
 #include "audio_task.h"
-
-
+#include "../user_driver/leds/user_leds.h"
 /***********************************************************************************************************************
  * Macro definitions
  ***********************************************************************************************************************/
@@ -72,6 +71,7 @@ static void AudioControl_Task(void *pvParameters)
         {
             play_audio_call_back(audio_type, device_data.mode, device_data.languge, device_data.page_number, device_data.touch_number);
             audio_active = false;
+            user_leds_call(kLED_OFF, 0);
         }
         vTaskDelay(100 / portTICK_PERIOD_MS);
     }

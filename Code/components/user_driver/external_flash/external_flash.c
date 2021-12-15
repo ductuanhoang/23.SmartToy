@@ -120,6 +120,7 @@ static esp_flash_t *init_ext_flash(void)
 
     // Print out the ID and size
     uint32_t id;
+    ESP_LOGI(TAG, "test size = %d KB", ext_flash->size);
     ESP_ERROR_CHECK(esp_flash_read_id(ext_flash, &id));
     ESP_LOGI(TAG, "Initialized external Flash, size=%d KB, ID=0x%x", ext_flash->size / 1024, id);
 

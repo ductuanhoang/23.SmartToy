@@ -27,6 +27,7 @@
 #include "../task/plan_task.h"
 #include "../task/audio_task.h"
 #include "../components/user_driver/external_flash/external_flash.h"
+#include "../components/user_driver/sd_card/sd_card.h"
 // #include "../components/task/user_console_interface.h"
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
@@ -44,19 +45,21 @@ void app_main(void)
     APP_LOGI("--- APP_MAIN: Free memory: %d bytes", esp_get_free_heap_size());
     device_settup_default();
     // Initialize NVS
-    esp_err_t ret = nvs_flash_init();
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
-    {
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        ret = nvs_flash_init();
-    }
-    ESP_ERROR_CHECK(ret);
-    flash_file_init();
-    logger_list_file("/spiffs");
+    // esp_err_t ret = nvs_flash_init();
+    // if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    // {
+    //     ESP_ERROR_CHECK(nvs_flash_erase());
+    //     ret = nvs_flash_init();
+    // }
+    // ESP_ERROR_CHECK(ret);
+    // flash_file_init();
+    // logger_list_file("/spiffs");
     check_map_size();
-    user_external_flash_init();
+    // user_external_flash_init();
 
     plan_task();
     audio_task();
     console_task_start();
+
+    user_sd_card_init();
 }

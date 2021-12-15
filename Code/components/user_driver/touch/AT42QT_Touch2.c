@@ -27,7 +27,7 @@
 /***********************************************************************************************************************
  * Typedef definitions
  ***********************************************************************************************************************/
-static void AT42QT_1_write(uint8_t value);
+static void AT42QT_2_write(uint8_t value);
 /***********************************************************************************************************************
  * Private global variables and functions
  ***********************************************************************************************************************/
@@ -76,20 +76,20 @@ static touch_buttons_handler event_callback_handler;
  * Imported global variables and functions (from other files)
  ***********************************************************************************************************************/
 
-void AT42QT_1_init(void)
+void AT42QT_2_init(void)
 {
-    user_spi_init(1);
+    // user_spi_init(1);
     AT42QT_Configure(11, 9);
     AT42QT_Calibrate();
     uint8_t id;
     if (AT42QT_GetID(&id))
-        APP_LOGD("id device = %x\r\n", id);
+        APP_LOGD("id 2 device = %x\r\n", id);
     else
-        APP_LOGD("id device error\r\n");
+        APP_LOGD("id 2 device error\r\n");
 }
 
 static bool _touch_buttons_press = false;
-void AT42QT_1_process(void)
+void AT42QT_2_process(void)
 {
     DeviceStatus_t user_get_status = AT42QT_GetStatus();
     uint8_t key_number = 0;
@@ -113,31 +113,31 @@ void AT42QT_1_process(void)
     }
 }
 
-void AT42QT_1_set_callback(touch_buttons_handler cb)
+void AT42QT_2_set_callback(touch_buttons_handler cb)
 {
     event_callback_handler = cb;
 }
 /***********************************************************************************************************************
  * Static Functions AT42QT1
  ***********************************************************************************************************************/
-static void AT42QT_1_write(uint8_t value)
+static void AT42QT_2_write(uint8_t value)
 {
-    spi_touch1_write(value);
+    spi_touch2_write(value);
 }
 
-static void AT42QT_1_read(uint8_t regAddr, uint8_t *data, uint8_t length)
+static void AT42QT_2_read(uint8_t regAddr, uint8_t *data, uint8_t length)
 {
-    spi_touch1_read(regAddr, data, length);
+    spi_touch2_read(regAddr, data, length);
 }
 
-static void AT42QT_1_cs_pause(void)
+static void AT42QT_2_cs_pause(void)
 {
-    spi_touch1_cs_pause();
+    spi_touch2_cs_pause();
 }
 
-static void AT42QT_1_cs_resume(void)
+static void AT42QT_2_cs_resume(void)
 {
-    spi_touch1_cs_resume();
+    spi_touch2_cs_resume();
 }
 
 /***********************************************************************************************************************
@@ -154,13 +154,13 @@ static bool AT42QT_GetID(uint8_t *id)
     do
     {
         delayMicroseconds(kDeviceCommDelay);
-        AT42QT_1_read(kGetDeviceId, &recv_data, 1);
+        AT42QT_2_read(kGetDeviceId, &recv_data, 1);
         if ((recv_data == kOK) | (recv_data == kGetDeviceId))
         {
             recv_data = 0x00;
-            AT42QT_1_cs_pause();
+            AT42QT_2_cs_pause();
             delayMicroseconds(kDeviceCommDelay);
-            AT42QT_1_read(0x00, &recv_data, 1);
+            AT42QT_2_read(0x00, &recv_data, 1);
             if (recv_data == kDeviceId)
             {
                 status = true;
@@ -186,13 +186,13 @@ static bool AT42QT_GetVer(uint8_t *ver)
     uint8_t recv_data = 0x00;
     do
     {
-        AT42QT_1_read(kGetFirmwareVer, &recv_data, 1);
+        AT42QT_2_read(kGetFirmwareVer, &recv_data, 1);
         if (recv_data == kOK)
         {
             recv_data = 0x00;
-            AT42QT_1_cs_pause();
+            AT42QT_2_cs_pause();
             delayMicroseconds(kDeviceCommDelay);
-            AT42QT_1_read(0x00, &recv_data, 1);
+            AT42QT_2_read(0x00, &recv_data, 1);
             if ((recv_data != kOK) && (recv_data != kGetFirmwareVer))
             {
                 status = true;
@@ -263,26 +263,26 @@ static void AT42QT_Configure(uint8_t numkeys, uint8_t guardkey)
 static void AT42QT_Save(void)
 {
     delayMicroseconds(kDeviceCommDelay);
-    AT42QT_1_write(kSaveToEeprom);
+    AT42QT_2_write(kSaveToEeprom);
     vTaskDelay(150 / portTICK_RATE_MS);
 }
 
 static void AT42QT_Reset(void)
 {
-    AT42QT_1_write(kChipReset);
+    AT42QT_2_write(kChipReset);
     vTaskDelay(150 / portTICK_RATE_MS); // after reset device need 150ms
 }
 
 static void AT42QT_Calibrate(void)
 {
     delayMicroseconds(kDeviceCommDelay);
-    AT42QT_1_write(kCalibrateAll);
+    AT42QT_2_write(kCalibrateAll);
     vTaskDelay(150 / portTICK_RATE_MS); // after reset device need 150ms
 }
 
 static void AT42QT_Erase(void)
 {
-    AT42QT_1_write(kEraseEeprom);
+    AT42QT_2_write(kEraseEeprom);
     vTaskDelay(150 / portTICK_RATE_MS); // after reset device need 150ms
 }
 static bool AT42QT_GetCmd(uint8_t cmd, uint8_t *data, uint8_t length)
@@ -291,12 +291,12 @@ static bool AT42QT_GetCmd(uint8_t cmd, uint8_t *data, uint8_t length)
     uint8_t try_count = 0;
     do
     {
-        AT42QT_1_read(cmd, data, 1);
+        AT42QT_2_read(cmd, data, 1);
         if ((data[0] == kOK) | (data[0] == cmd))
         {
-            AT42QT_1_cs_pause();
+            AT42QT_2_cs_pause();
             delayMicroseconds(kDeviceCommDelay);
-            AT42QT_1_read(0x00, data, length);
+            AT42QT_2_read(0x00, data, length);
             if ((data[0] != kOK) && (data[0] != cmd))
             {
                 status = true;
@@ -316,9 +316,9 @@ static bool AT42QT_SetCmd(uint8_t addr, uint8_t data)
         return false;
     }
     delayMicroseconds(kDeviceCommDelay);
-    AT42QT_1_write(kWriteCmd + addr);
+    AT42QT_2_write(kWriteCmd + addr);
     delayMicroseconds(kDeviceCommDelay);
-    AT42QT_1_write(data);
+    AT42QT_2_write(data);
     return true;
 }
 /***********************************************************************************************************************

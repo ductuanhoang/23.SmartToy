@@ -32,6 +32,9 @@
 
 #include "main.h"
 
+#define USE_SD_CARD_PLAY_AUDIO 1
+#define USE_INTERAL_FLASH_PLAY_AUDIO 0
+
 enum
 {
 	E_LOG_LVL_NONE,
@@ -109,7 +112,7 @@ enum
 
 typedef enum
 {
-	kMODE_TOP = 0,
+	kMODE_TOP = 1,
 	kMODE_MIDDLE,
 	kMODE_BOTTOM
 } e_MODE_SELECTOR;
